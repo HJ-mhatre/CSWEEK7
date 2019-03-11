@@ -1,0 +1,100 @@
+---
+title: "TCG7"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(rvest)
+
+#Scraping Html from website
+Rialto_cinemas<-read_html("https://www.imdb.com/showtimes/?ref_=nv_tp_sh_3")
+
+Rialto_cinemas
+
+?html_nodes
+
+
+#using selector gadget to figure out input for html_nodes,
+
+title<-Rialto_cinemas%>%html_nodes("#cinemas-at-list span a")%>%html_text()
+title
+
+
+  
+Duration<-Rialto_cinemas%>%html_nodes("time")%>%html_text()
+Duration1<-gsub("[a-zA-Z ]", "", Duration)
+Duration1<-as.numeric(Duration1)
+
+
+User_Rating<-Rialto_cinemas%>%html_nodes(".nobr:nth-child(1) strong")%>%html_text()
+User_Rating<-as.numeric(User_Rating)
+
+
+
+Movies_in_Rialto<-data.frame(title,Duration1,User_Rating)
+
+Movies_in_Rialto
+
+library(ggplot2)
+
+ggplot(Movies_in_Rialto, aes(x=Duration1, y=User_Rating))  + geom_point(color="Green", size=2) + geom_smooth(method='lm', se=FALSE)
+
+
+
+```
+
+
+```{r}
+
+library(XML)
+library(rvest)
+
+weburl1<-read_html("https://www.loriferber.com/research/presidential-facts-statistics/presidential-birthdates.html")
+weburl1
+
+
+Name<-weburl1%>%html_nodes("td:nth-child(2) span")%>%html_text()
+Name
+
+Term<-weburl1%>%html_nodes("td:nth-child(3) span")%>%html_text()
+Term
+
+
+Place_of_birth<-weburl1%>%html_nodes("td:nth-child(4) span")%>%html_text()
+Place_of_birth
+
+Date_of_Birth<-weburl1%>%html_nodes("td:nth-child(5) span")%>%html_text()
+format(Date_of_Birth, format="%m/%d/%Y")
+
+
+Age_at_Inauguration<-weburl1%>%html_nodes("td:nth-child(7) span")%>%html_text()
+Age_at_Inauguration1<-as.numeric(Age_at_Inauguration)
+
+
+
+today <- Sys.Date()
+format(today, format="%m/%d/%Y")
+
+presidents_age_as_of_today_in_weeks<-floor(difftime((Sys.Date()),as.Date(Date_of_Birth,  "%m/%d/%Y"),unit="weeks")/52.25)
+
+presidents_age_as_of_today_in_weeks1<-as.numeric(presidents_age_as_of_today_in_weeks)
+
+
+
+US_Presidential_Info<-data.frame(Name,Term,Place_of_birth,Date_of_Birth,Age_at_Inauguration1,presidents_age_as_of_today_in_weeks1)
+
+US_Presidential_Info
+
+library(ggplot2)
+
+ggplot(US_Presidential_Info, aes(x=Age_at_Inauguration1, y=presidents_age_as_of_today_in_weeks1))  + geom_point(color="RED", size=1) + geom_smooth(method='lm', se=FALSE)
+
+
+
+```
+
+
