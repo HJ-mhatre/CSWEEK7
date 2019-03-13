@@ -43,7 +43,7 @@ library(ggplot2)
 
 ggplot(Movies_in_Rialto, aes(x=Duration1, y=User_Rating))  + geom_point(color="Green", size=2) + geom_smooth(method='lm', se=FALSE)
 
-
+summary(Movies_in_Rialto)
 
 ```
 
@@ -100,7 +100,7 @@ library(ggplot2)
 ggplot(US_Presidential_Info, aes(x=Age_at_Inauguration, y=presidents_age_as_of_today_in_weeks))  + geom_point(color="RED", size=1) + geom_smooth(method='lm', se=FALSE)
 
 
-
+summary(US_Presidential_Info)
 ```
 
 
